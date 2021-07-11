@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.gulderbone.simple_messages.databinding.ActivityLoginBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.messages.LatestMessagesActivity
-import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 .addOnFailureListener {
-
+                    Log.e(TAG, "Failed to log in: $it")
                 }
         }
 
