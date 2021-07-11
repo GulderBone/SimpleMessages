@@ -7,18 +7,18 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.gulderbone.simple_messages.RequestCode
-import com.gulderbone.simple_messages.models.User
-import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
-import com.gulderbone.simple_messages.extensions.TAG
-import com.gulderbone.simple_messages.messages.LatestMessagesActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.gulderbone.simple_messages.BaseActivity
+import com.gulderbone.simple_messages.RequestCode
+import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
+import com.gulderbone.simple_messages.extensions.TAG
+import com.gulderbone.simple_messages.messages.LatestMessagesActivity
+import com.gulderbone.simple_messages.models.User
 import java.util.*
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : BaseActivity() {
     private lateinit var binding: ActivityRegisterBinding
 
     private var selectedPhotoUri: Uri? = null

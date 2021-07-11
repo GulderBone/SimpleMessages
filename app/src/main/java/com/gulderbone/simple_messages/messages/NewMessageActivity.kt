@@ -4,22 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.gulderbone.simple_messages.BaseActivity
 import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.databinding.ActivityNewMessageBinding
 import com.gulderbone.simple_messages.databinding.UserRowNewMessageBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.models.User
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.viewbinding.BindableItem
 
-class NewMessageActivity : AppCompatActivity() {
+class NewMessageActivity : BaseActivity() {
     private lateinit var binding: ActivityNewMessageBinding
 
     companion object {
