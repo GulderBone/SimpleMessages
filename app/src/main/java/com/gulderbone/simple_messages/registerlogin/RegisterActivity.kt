@@ -69,8 +69,8 @@ class RegisterActivity : BaseActivity() {
     }
 
     private fun performRegister() {
-        val email = binding.emailEdittextRegister.text.toString()
-        val password = binding.passwordEdittextRegister.text.toString()
+        val email = binding.emailEdittextRegister.editText?.text.toString()
+        val password = binding.passwordEdittextRegister.editText?.text.toString()
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please enter text in email/pw", Toast.LENGTH_SHORT).show()
@@ -120,7 +120,7 @@ class RegisterActivity : BaseActivity() {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance("https://messenger-72529-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users/$uid")
 
-        val user = User(uid, binding.usernameEdittextRegister.text.toString(), profileImageUrl)
+        val user = User(uid, binding.usernameEdittextRegister.editText?.text.toString(), profileImageUrl)
 
         ref.setValue(user)
             .addOnSuccessListener {
