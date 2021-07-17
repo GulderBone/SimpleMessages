@@ -18,8 +18,8 @@ class LoginActivity : BaseActivity() {
         setContentView(binding.root)
 
         binding.loginButtonLogin.setOnClickListener {
-            val email = binding.emailEdittextLogin.text.toString()
-            val password = binding.passwordEdittextLogin.text.toString()
+            val email = binding.emailEdittextLogin.editText?.text.toString()
+            val password = binding.passwordEdittextLogin.editText?.text.toString()
 
             Log.d(TAG, "Attempt login with email/pw: $email/***")
 
