@@ -103,7 +103,7 @@ class ChatLogActivity : BaseActivity() {
         val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
         latestMessageToRef.setValue(chatMessage)
 
-        binding.edittextChatLog.text.clear()
+        binding.edittextChatLog.text?.clear()
         binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
     }
 }
