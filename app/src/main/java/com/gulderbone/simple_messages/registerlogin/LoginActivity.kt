@@ -3,13 +3,13 @@ package com.gulderbone.simple_messages.registerlogin
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.gulderbone.simple_messages.BaseActivity
 import com.gulderbone.simple_messages.databinding.ActivityLoginBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.messages.LatestMessagesActivity
-import com.google.firebase.auth.FirebaseAuth
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,8 +18,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.loginButtonLogin.setOnClickListener {
-            val email = binding.emailEdittextLogin.text.toString()
-            val password = binding.passwordEdittextLogin.text.toString()
+            val email = binding.emailEdittextLogin.editText?.text.toString()
+            val password = binding.passwordEdittextLogin.editText?.text.toString()
 
             Log.d(TAG, "Attempt login with email/pw: $email/***")
 
@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 .addOnFailureListener {
-
+                    Log.e(TAG, "Failed to log in: $it")
                 }
         }
 

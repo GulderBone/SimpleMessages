@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.gulderbone.simple_messages.BaseActivity
 import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.databinding.ActivityLatestMessagesBinding
 import com.gulderbone.simple_messages.extensions.TAG
@@ -19,7 +19,7 @@ import com.gulderbone.simple_messages.registerlogin.RegisterActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 
-class LatestMessagesActivity : AppCompatActivity() {
+class LatestMessagesActivity : BaseActivity() {
     private lateinit var binding: ActivityLatestMessagesBinding
 
     private val adapter = GroupAdapter<GroupieViewHolder>()

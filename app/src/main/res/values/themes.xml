@@ -1,16 +1,38 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Theme.SimpleMessages" parent="Theme.AppCompat.DayNight">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    <style name="Theme.SimpleMessages" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
+
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
+
+        <item name="android:colorBackground">@color/white_50</item>
+        <item name="colorSurface">@color/white_50</item>
+
+        <item name="colorOnPrimary">@color/black_900</item>
+        <item name="colorOnSecondary">@color/white_50</item>
+
+        <!-- CircleImageViewBorder-->
+        <item name="civ_border_color">?attr/colorPrimary</item>
+        <item name="civ_border_width">4dp</item>
+
+        <!-- Status bar color -->
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
+    </style>
+
+    <style name="OutlinedEditTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopEnd">25dp</item>
+        <item name="boxCornerRadiusBottomStart">25dp</item>
+        <item name="boxCornerRadiusBottomEnd">25dp</item>
+
+        <item name="hintTextColor">@color/black_900</item>
+        <item name="boxStrokeColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="SmallCircleImageView">
+        <item name="civ_border_color">?attr/colorPrimary</item>
+        <item name="civ_border_width">2dp</item>
     </style>
 </resources>

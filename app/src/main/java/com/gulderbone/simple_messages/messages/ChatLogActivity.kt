@@ -3,12 +3,12 @@ package com.gulderbone.simple_messages.messages
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.gulderbone.simple_messages.BaseActivity
 import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.databinding.ActivityChatLogBinding
 import com.gulderbone.simple_messages.databinding.ChatFromRowBinding
@@ -21,7 +21,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.viewbinding.BindableItem
 
-class ChatLogActivity : AppCompatActivity() {
+class ChatLogActivity : BaseActivity() {
     private lateinit var binding: ActivityChatLogBinding
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
@@ -103,7 +103,7 @@ class ChatLogActivity : AppCompatActivity() {
         val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
         latestMessageToRef.setValue(chatMessage)
 
-        binding.edittextChatLog.text.clear()
+        binding.edittextChatLog.text?.clear()
         binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
     }
 }

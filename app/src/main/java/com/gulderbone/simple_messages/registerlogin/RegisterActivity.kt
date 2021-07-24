@@ -7,18 +7,18 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.gulderbone.simple_messages.RequestCode
-import com.gulderbone.simple_messages.models.User
-import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
-import com.gulderbone.simple_messages.extensions.TAG
-import com.gulderbone.simple_messages.messages.LatestMessagesActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.gulderbone.simple_messages.BaseActivity
+import com.gulderbone.simple_messages.RequestCode
+import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
+import com.gulderbone.simple_messages.extensions.TAG
+import com.gulderbone.simple_messages.messages.LatestMessagesActivity
+import com.gulderbone.simple_messages.models.User
 import java.util.*
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : BaseActivity() {
     private lateinit var binding: ActivityRegisterBinding
 
     private var selectedPhotoUri: Uri? = null
@@ -69,8 +69,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun performRegister() {
-        val email = binding.emailEdittextRegister.text.toString()
-        val password = binding.passwordEdittextRegister.text.toString()
+        val email = binding.emailEdittextRegister.editText?.text.toString()
+        val password = binding.passwordEdittextRegister.editText?.text.toString()
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please enter text in email/pw", Toast.LENGTH_SHORT).show()
@@ -120,7 +120,7 @@ class RegisterActivity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance("https://messenger-72529-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users/$uid")
 
-        val user = User(uid, binding.usernameEdittextRegister.text.toString(), profileImageUrl)
+        val user = User(uid, binding.usernameEdittextRegister.editText?.text.toString(), profileImageUrl)
 
         ref.setValue(user)
             .addOnSuccessListener {
