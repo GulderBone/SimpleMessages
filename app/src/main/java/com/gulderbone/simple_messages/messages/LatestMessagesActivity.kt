@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.gulderbone.simple_messages.BaseActivity
 import com.gulderbone.simple_messages.R
+import com.gulderbone.simple_messages.chat_log.ChatLogActivity
 import com.gulderbone.simple_messages.databinding.ActivityLatestMessagesBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.models.ChatMessage
@@ -39,7 +40,6 @@ class LatestMessagesActivity : BaseActivity() {
         binding.recyclerviewLatestMessages.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         adapter.setOnItemClickListener { item, view ->
-            Log.d(TAG, "123")
             val row = item as LatestMessageRow
             val intent = Intent(view.context, ChatLogActivity::class.java)
             intent.putExtra(NewMessageActivity.USER_KEY, row.chatPartnerUser)

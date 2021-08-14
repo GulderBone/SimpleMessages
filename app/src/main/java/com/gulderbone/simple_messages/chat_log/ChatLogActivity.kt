@@ -1,30 +1,32 @@
-package com.gulderbone.simple_messages.messages
+package com.gulderbone.simple_messages.chat_log
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.gulderbone.simple_messages.BaseActivity
 import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.databinding.ActivityChatLogBinding
 import com.gulderbone.simple_messages.databinding.ChatFromRowBinding
 import com.gulderbone.simple_messages.databinding.ChatToRowBinding
 import com.gulderbone.simple_messages.extensions.TAG
-import com.gulderbone.simple_messages.models.ChatMessage
+import com.gulderbone.simple_messages.messages.LatestMessagesActivity
+import com.gulderbone.simple_messages.messages.NewMessageActivity
 import com.gulderbone.simple_messages.models.User
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.viewbinding.BindableItem
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class ChatLogActivity : BaseActivity() {
     private lateinit var binding: ActivityChatLogBinding
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
+
+    private val viewModel by lazy { ViewModelProvider(this).get(ChatLogViewModel::class.java) }
 
     var toUser: User? = null
 
@@ -38,6 +40,8 @@ class ChatLogActivity : BaseActivity() {
         toUser = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
         supportActionBar?.title = toUser?.username
 
+        viewModel.getToUser(toUser)
+
         listenForMessages()
 
         binding.sendButtonChatLog.setOnClickListener {
@@ -46,65 +50,34 @@ class ChatLogActivity : BaseActivity() {
     }
 
     private fun listenForMessages() {
-        val fromId = FirebaseAuth.getInstance().uid
-        val toId = toUser?.uid
-        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
-
-        ref.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val chatMessage = snapshot.getValue(ChatMessage::class.java)
-
-                if (chatMessage != null) {
-                    Log.d(TAG, chatMessage.text)
+        viewModel.listenForMessages()
+            .observeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe({ chatMessage ->
+                Log.d(TAG, chatMessage.text)
+                runOnUiThread {
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
                         val currentUser = LatestMessagesActivity.currentUser
-                        adapter.add(ChatFromItem(chatMessage.text, currentUser ?: return))
+                        adapter.add(ChatFromItem(chatMessage.text, currentUser ?: return@runOnUiThread))
                     } else {
-                        adapter.add(ChatToItem(chatMessage.text, toUser ?: return))
+                        adapter.add(ChatToItem(chatMessage.text, toUser ?: return@runOnUiThread))
                     }
+                    binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
                 }
-
-                binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onCancelled(error: DatabaseError) {}
-        })
+            }, {
+                Log.e(TAG, "Listening for chat messages failed", it)
+            })
     }
 
     private fun performSendMessage() {
         val text = binding.edittextChatLog.text.toString()
 
-        val fromId = FirebaseAuth.getInstance().uid
+        val messageSent = viewModel.sendMessage(text)
 
-        val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
-        val toId = user?.uid
-
-        if (fromId == null || toId == null) return
-
-        val reference = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
-        val toReference = FirebaseDatabase.getInstance().getReference("user-messages/$toId/$fromId").push()
-
-        val chatMessage = ChatMessage(reference.key!!, text, fromId, toId, System.currentTimeMillis() / 1000)
-        reference.setValue(chatMessage)
-            .addOnSuccessListener {
-                Log.d(TAG, "Save our chat message: ${reference.key}")
-            }
-        toReference.setValue(chatMessage)
-
-        val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
-        latestMessageRef.setValue(chatMessage)
-
-        val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
-        latestMessageToRef.setValue(chatMessage)
-
-        binding.edittextChatLog.text?.clear()
-        binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
+        if (messageSent) {
+            binding.edittextChatLog.text?.clear()
+            binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
+        }
     }
 }
 
