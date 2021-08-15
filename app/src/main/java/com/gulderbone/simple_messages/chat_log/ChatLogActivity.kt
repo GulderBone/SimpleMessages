@@ -51,19 +51,17 @@ class ChatLogActivity : BaseActivity() {
 
     private fun listenForMessages() {
         viewModel.listenForMessages()
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
             .subscribe({ chatMessage ->
                 Log.d(TAG, chatMessage.text)
-                runOnUiThread {
-                    if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                        val currentUser = LatestMessagesActivity.currentUser
-                        adapter.add(ChatFromItem(chatMessage.text, currentUser ?: return@runOnUiThread))
-                    } else {
-                        adapter.add(ChatToItem(chatMessage.text, toUser ?: return@runOnUiThread))
-                    }
-                    binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
+                if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
+                    val currentUser = LatestMessagesActivity.currentUser
+                    adapter.add(ChatFromItem(chatMessage.text, currentUser ?: return@subscribe))
+                } else {
+                    adapter.add(ChatToItem(chatMessage.text, toUser ?: return@subscribe))
                 }
+                binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
             }, {
                 Log.e(TAG, "Listening for chat messages failed", it)
             })
