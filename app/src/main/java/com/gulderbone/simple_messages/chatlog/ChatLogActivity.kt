@@ -8,7 +8,7 @@ import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.databinding.ActivityChatLogBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.extensions.addDisposableTo
-import com.gulderbone.simple_messages.messages.LatestMessagesActivity
+import com.gulderbone.simple_messages.latestmessages.LatestMessagesActivity
 import com.gulderbone.simple_messages.messages.NewMessageActivity
 import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.recyclerview_rows.ChatFromItem
