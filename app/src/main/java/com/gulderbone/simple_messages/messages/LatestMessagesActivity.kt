@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.R
-import com.gulderbone.simple_messages.chat_log.ChatLogActivity
+import com.gulderbone.simple_messages.chatlog.ChatLogActivity
 import com.gulderbone.simple_messages.databinding.ActivityLatestMessagesBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.models.ChatMessage

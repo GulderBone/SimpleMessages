@@ -1,4 +1,4 @@
-package com.gulderbone.simple_messages.chat_log
+package com.gulderbone.simple_messages.chatlog
 
 import android.os.Bundle
 import android.util.Log

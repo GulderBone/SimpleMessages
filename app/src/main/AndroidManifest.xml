@@ -23,7 +23,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gulderbone.simple_messages.messages.LatestMessagesActivity" />
         </activity>
-        <activity android:name="com.gulderbone.simple_messages.chat_log.ChatLogActivity">
+        <activity android:name="com.gulderbone.simple_messages.chatlog.ChatLogActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gulderbone.simple_messages.messages.LatestMessagesActivity" />

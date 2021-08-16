@@ -1,4 +1,4 @@
-package com.gulderbone.simple_messages.chat_log
+package com.gulderbone.simple_messages.chatlog
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
