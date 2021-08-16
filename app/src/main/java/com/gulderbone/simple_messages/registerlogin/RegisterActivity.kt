@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import com.gulderbone.simple_messages.BaseActivity
+import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.RequestCode
 import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
 import com.gulderbone.simple_messages.extensions.TAG

@@ -8,7 +8,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.gulderbone.simple_messages.BaseActivity
+import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.chat_log.ChatLogActivity
 import com.gulderbone.simple_messages.databinding.ActivityNewMessageBinding

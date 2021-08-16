@@ -8,14 +8,14 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.gulderbone.simple_messages.BaseActivity
+import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.chat_log.ChatLogActivity
 import com.gulderbone.simple_messages.databinding.ActivityLatestMessagesBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.models.ChatMessage
 import com.gulderbone.simple_messages.models.User
-import com.gulderbone.simple_messages.recyclerview_rows.LatestMessageRow
+import com.gulderbone.simple_messages.recyclerview_rows.LatestMessage
 import com.gulderbone.simple_messages.registerlogin.RegisterActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -40,7 +40,7 @@ class LatestMessagesActivity : BaseActivity() {
         binding.recyclerviewLatestMessages.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         adapter.setOnItemClickListener { item, view ->
-            val row = item as LatestMessageRow
+            val row = item as LatestMessage
             val intent = Intent(view.context, ChatLogActivity::class.java)
             intent.putExtra(NewMessageActivity.USER_KEY, row.chatPartnerUser)
             startActivity(intent)
@@ -83,7 +83,7 @@ class LatestMessagesActivity : BaseActivity() {
     private fun refreshRecyclerViewMessages() {
         adapter.clear()
         latestMessagesMap.values.forEach {
-            adapter.add(LatestMessageRow(it))
+            adapter.add(LatestMessage(it))
         }
     }
 

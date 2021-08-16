@@ -13,7 +13,7 @@ import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.viewbinding.BindableItem
 
-class LatestMessageRow(private val chatMessage: ChatMessage) : BindableItem<LatestMessageRowBinding>() {
+class LatestMessage(private val chatMessage: ChatMessage) : BindableItem<LatestMessageRowBinding>() {
     var chatPartnerUser: User? = null
 
     override fun bind(viewBinding: LatestMessageRowBinding, position: Int) {
