@@ -1,11 +1,14 @@
 package com.gulderbone.simple_messages
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 open class BaseActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    val disposables: CompositeDisposable = CompositeDisposable()
+    
+    override fun onDestroy() {
+        disposables.clear()
+        super.onDestroy()
     }
 }
