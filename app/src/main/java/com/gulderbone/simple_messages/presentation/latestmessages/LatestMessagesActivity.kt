@@ -1,4 +1,4 @@
-package com.gulderbone.simple_messages.latestmessages
+package com.gulderbone.simple_messages.presentation.latestmessages
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.base.BaseActivity
-import com.gulderbone.simple_messages.chatlog.ChatLogActivity
+import com.gulderbone.simple_messages.presentation.chatlog.ChatLogActivity
 import com.gulderbone.simple_messages.databinding.ActivityLatestMessagesBinding
 import com.gulderbone.simple_messages.messages.NewMessageActivity
 import com.gulderbone.simple_messages.models.User

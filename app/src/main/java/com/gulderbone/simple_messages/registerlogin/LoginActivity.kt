@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.databinding.ActivityLoginBinding
 import com.gulderbone.simple_messages.extensions.TAG
-import com.gulderbone.simple_messages.latestmessages.LatestMessagesActivity
+import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
 
 class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding

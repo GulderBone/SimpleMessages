@@ -10,7 +10,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.R
-import com.gulderbone.simple_messages.chatlog.ChatLogActivity
+import com.gulderbone.simple_messages.presentation.chatlog.ChatLogActivity
 import com.gulderbone.simple_messages.databinding.ActivityNewMessageBinding
 import com.gulderbone.simple_messages.databinding.UserRowNewMessageBinding
 import com.gulderbone.simple_messages.extensions.TAG

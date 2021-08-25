@@ -14,7 +14,7 @@ import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.RequestCode
 import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
 import com.gulderbone.simple_messages.extensions.TAG
-import com.gulderbone.simple_messages.latestmessages.LatestMessagesActivity
+import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
 import com.gulderbone.simple_messages.models.User
 import java.util.*
 

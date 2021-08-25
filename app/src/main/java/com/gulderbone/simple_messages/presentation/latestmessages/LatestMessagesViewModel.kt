@@ -1,4 +1,4 @@
-package com.gulderbone.simple_messages.latestmessages
+package com.gulderbone.simple_messages.presentation.latestmessages
 
 import android.util.Log
 import androidx.lifecycle.LiveData
