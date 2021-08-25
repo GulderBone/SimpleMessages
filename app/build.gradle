@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.gulderbone.simple_messages"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 3
         versionName "0.0.3"
@@ -55,6 +55,12 @@ dependencies {
     implementation "com.github.lisawray.groupie:groupie:2.9.0"
     implementation "com.github.lisawray.groupie:groupie-viewbinding:2.9.0"
 
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+    implementation 'id.zelory:compressor:3.0.1'
+
+    implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
+
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-auth-ktx'
@@ -68,4 +74,7 @@ dependencies {
     // RxJava
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
 }
