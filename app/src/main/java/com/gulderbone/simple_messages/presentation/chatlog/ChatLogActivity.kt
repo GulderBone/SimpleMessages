@@ -48,8 +48,8 @@ class ChatLogActivity : BaseActivity() {
 
     private fun listenForMessages() {
         viewModel.listenForMessages()
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ chatMessage ->
                 Log.d(TAG, chatMessage.text)
                 if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
