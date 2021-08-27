@@ -22,7 +22,7 @@
         </activity>
         <activity android:name="com.gulderbone.simple_messages.registerlogin.RegisterActivity"/>
         <activity android:name="com.gulderbone.simple_messages.registerlogin.LoginActivity" />
-        <activity android:name="com.gulderbone.simple_messages.messages.NewMessageActivity">
+        <activity android:name="com.gulderbone.simple_messages.presentation.newchat.NewChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity" />

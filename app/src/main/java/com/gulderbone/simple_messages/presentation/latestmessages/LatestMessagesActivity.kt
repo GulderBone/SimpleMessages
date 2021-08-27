@@ -12,7 +12,7 @@ import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.presentation.chatlog.ChatLogActivity
 import com.gulderbone.simple_messages.databinding.ActivityLatestMessagesBinding
-import com.gulderbone.simple_messages.messages.NewMessageActivity
+import com.gulderbone.simple_messages.presentation.newchat.NewChatActivity
 import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.recyclerview_rows.LatestMessage
 import com.gulderbone.simple_messages.registerlogin.RegisterActivity
@@ -48,20 +48,17 @@ class LatestMessagesActivity : BaseActivity() {
 
         listenForLatestMessages()
 
-        viewModel.fetchCurrentUser()
-
         verifyUserIsLoggedIn()
     }
 
     private fun onLatestMessageClicks(item: Item<*>, view: View) {
         val row = item as LatestMessage
         val intent = Intent(view.context, ChatLogActivity::class.java)
-        intent.putExtra(NewMessageActivity.USER_KEY, row.chatPartnerUser)
+        intent.putExtra(NewChatActivity.USER_KEY, row.chatPartnerUser)
         startActivity(intent)
     }
 
     private fun listenForLatestMessages() {
-        viewModel.listenForLatestMessages()
         viewModel.getLatestMessages().observe(this) { messagesMap ->
             adapter.clear()
             messagesMap.values.forEach { chatMessage ->
@@ -82,7 +79,7 @@ class LatestMessagesActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_new_message -> {
-                val intent = Intent(this, NewMessageActivity::class.java)
+                val intent = Intent(this, NewChatActivity::class.java)
                 startActivity(intent)
             }
             R.id.menu_sign_out -> {
