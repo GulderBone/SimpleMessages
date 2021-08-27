@@ -11,10 +11,28 @@ import com.gulderbone.simple_messages.models.ChatMessage
 import com.gulderbone.simple_messages.models.User
 
 class LatestMessagesViewModel : ViewModel() {
-    val latestMessages = MutableLiveData<HashMap<String, ChatMessage>>()
-    val latestMessagesMap = HashMap<String, ChatMessage>()
+    private val latestMessages = MutableLiveData<HashMap<String, ChatMessage>>()
+    private val latestMessagesMap = HashMap<String, ChatMessage>()
 
-    fun listenForLatestMessages() {
+    init {
+        fetchCurrentUser()
+        listenForLatestMessages()
+    }
+
+    private fun fetchCurrentUser() {
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                LatestMessagesActivity.currentUser = snapshot.getValue(User::class.java)
+                Log.d(TAG, "Current user ${LatestMessagesActivity.currentUser?.username}")
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun listenForLatestMessages() {
         val fromId = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
         ref.addChildEventListener(object : ChildEventListener {
@@ -40,20 +58,5 @@ class LatestMessagesViewModel : ViewModel() {
         })
     }
 
-    fun fetchCurrentUser() {
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                LatestMessagesActivity.currentUser = snapshot.getValue(User::class.java)
-                Log.d(TAG, "Current user ${LatestMessagesActivity.currentUser?.username}")
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-        })
-    }
-
-    fun getLatestMessages(): LiveData<HashMap<String, ChatMessage>> {
-        return latestMessages
-    }
+    fun getLatestMessages(): LiveData<HashMap<String, ChatMessage>> = latestMessages
 }
