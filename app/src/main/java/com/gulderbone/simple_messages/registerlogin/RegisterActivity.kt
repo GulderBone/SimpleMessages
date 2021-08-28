@@ -15,11 +15,11 @@ import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import com.gulderbone.simple_messages.BaseActivity
+import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.extensions.getFilePathFromContentUri
-import com.gulderbone.simple_messages.messages.LatestMessagesActivity
+import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
 import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.utils.Constant
 import com.gulderbone.simple_messages.utils.RequestCode
@@ -49,20 +49,24 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         }
 
         binding.selectphotoButtonRegister.setOnClickListener {
-            if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                openImagePicker()
-            } else {
-                EasyPermissions.requestPermissions(
-                    this,
-                    "Permission to read files is required to choose profile picture",
-                    RequestCode.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-            }
+            chooseProfilePicture()
         }
 
         binding.registerButtonRegister.setOnClickListener {
             performRegister()
+        }
+    }
+
+    private fun chooseProfilePicture() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            openImagePicker()
+        } else {
+            EasyPermissions.requestPermissions(
+                this,
+                "Permission to read files is required to choose profile picture",
+                RequestCode.READ_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
         }
     }
 

@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SimpleMessages">
-        <activity android:name="com.gulderbone.simple_messages.messages.LatestMessagesActivity">
+        <activity android:name="com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,15 +22,15 @@
         </activity>
         <activity android:name="com.gulderbone.simple_messages.registerlogin.RegisterActivity"/>
         <activity android:name="com.gulderbone.simple_messages.registerlogin.LoginActivity" />
-        <activity android:name="com.gulderbone.simple_messages.messages.NewMessageActivity">
+        <activity android:name="com.gulderbone.simple_messages.presentation.newchat.NewChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gulderbone.simple_messages.messages.LatestMessagesActivity" />
+                android:value="com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity" />
         </activity>
-        <activity android:name="com.gulderbone.simple_messages.messages.ChatLogActivity">
+        <activity android:name="com.gulderbone.simple_messages.presentation.chatlog.ChatLogActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gulderbone.simple_messages.messages.LatestMessagesActivity" />
+                android:value="com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity" />
         </activity>
     </application>
 
