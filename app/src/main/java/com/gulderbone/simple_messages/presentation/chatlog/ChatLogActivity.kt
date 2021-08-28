@@ -37,8 +37,6 @@ class ChatLogActivity : BaseActivity() {
         toUser = intent.getParcelableExtra(NewChatActivity.USER_KEY)
         supportActionBar?.title = toUser?.username
 
-        viewModel.getToUser(toUser)
-
         listenForMessages()
 
         binding.sendButtonChatLog.setOnClickListener {
@@ -47,7 +45,7 @@ class ChatLogActivity : BaseActivity() {
     }
 
     private fun listenForMessages() {
-        viewModel.listenForMessages()
+        viewModel.listenForMessages(toUser)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ chatMessage ->
@@ -67,7 +65,7 @@ class ChatLogActivity : BaseActivity() {
     private fun performSendMessage() {
         val text = binding.edittextChatLog.text.toString()
 
-        val messageSent = viewModel.sendMessage(text)
+        val messageSent = viewModel.sendMessage(text, toUser)
 
         if (messageSent) {
             binding.edittextChatLog.text?.clear()

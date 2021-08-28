@@ -13,13 +13,8 @@ import com.gulderbone.simple_messages.models.User
 import io.reactivex.rxjava3.core.Observable
 
 class ChatLogViewModel : ViewModel() {
-    private var toUser: User? = null
 
-    fun getToUser(toUser: User?) {
-        this.toUser = toUser
-    }
-
-    fun listenForMessages(): Observable<ChatMessage> {
+    fun listenForMessages(toUser: User?): Observable<ChatMessage> {
         val fromId = FirebaseAuth.getInstance().uid
         val toId = toUser?.uid
         val chatLogReference = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
@@ -43,7 +38,7 @@ class ChatLogViewModel : ViewModel() {
         }
     }
 
-    fun sendMessage(text: String): Boolean {
+    fun sendMessage(text: String, toUser: User?): Boolean {
         val fromId = FirebaseAuth.getInstance().uid
 
         val toId = toUser?.uid
