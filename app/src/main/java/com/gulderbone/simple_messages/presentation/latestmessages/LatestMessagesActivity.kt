@@ -43,12 +43,11 @@ class LatestMessagesActivity : BaseActivity() {
                 DividerItemDecoration.VERTICAL
             )
         )
-
-        adapter.setOnItemClickListener { item, view -> onLatestMessageClicks(item, view) }
+        verifyUserIsLoggedIn()
 
         listenForLatestMessages()
 
-        verifyUserIsLoggedIn()
+        adapter.setOnItemClickListener { item, view -> onLatestMessageClicks(item, view) }
     }
 
     private fun onLatestMessageClicks(item: Item<*>, view: View) {
