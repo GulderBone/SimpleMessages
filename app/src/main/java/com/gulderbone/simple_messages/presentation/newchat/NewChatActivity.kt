@@ -33,6 +33,16 @@ class NewChatActivity : BaseActivity() {
         setOnItemClickListener()
     }
 
+    private fun displayUsers() {
+        viewModel.getUsers().observe(this) { users ->
+            users.forEach { user ->
+                adapter.add(UserItem(user))
+            }
+        }
+
+        binding.recyclerviewNewmessage.adapter = adapter
+    }
+
     private fun setOnItemClickListener() {
         adapter.setOnItemClickListener { item, view ->
             val userItem = item as UserItem
@@ -42,15 +52,5 @@ class NewChatActivity : BaseActivity() {
 
             finish()
         }
-    }
-
-    private fun displayUsers() {
-        viewModel.getUsers().observe(this) { users ->
-            users.forEach { user ->
-                adapter.add(UserItem(user))
-            }
-        }
-
-        binding.recyclerviewNewmessage.adapter = adapter
     }
 }
