@@ -93,3 +93,4 @@ lint/tmp/
 # Other
 app/simplemessages-service.json
 gradle.properties
+.json
