@@ -87,3 +87,7 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+# Other
+simplemessages-service.json
+gradle.properties
