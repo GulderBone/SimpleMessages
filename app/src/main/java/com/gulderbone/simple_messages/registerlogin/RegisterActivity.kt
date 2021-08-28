@@ -49,20 +49,24 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         }
 
         binding.selectphotoButtonRegister.setOnClickListener {
-            if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                openImagePicker()
-            } else {
-                EasyPermissions.requestPermissions(
-                    this,
-                    "Permission to read files is required to choose profile picture",
-                    RequestCode.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-            }
+            chooseProfilePicture()
         }
 
         binding.registerButtonRegister.setOnClickListener {
             performRegister()
+        }
+    }
+
+    private fun chooseProfilePicture() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            openImagePicker()
+        } else {
+            EasyPermissions.requestPermissions(
+                this,
+                "Permission to read files is required to choose profile picture",
+                RequestCode.READ_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
         }
     }
 
