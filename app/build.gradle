@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'com.google.gms.google-services'
     id 'kotlin-parcelize'
+    id 'com.github.triplet.play'
 }
 
 android {
@@ -13,8 +14,8 @@ android {
         applicationId "com.gulderbone.simple_messages"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 3
-        versionName "0.0.3"
+        versionCode 7
+        versionName "0.0.7 - alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
@@ -24,10 +25,22 @@ android {
         viewBinding true
     }
 
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -37,6 +50,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+}
+
+play {
+    serviceAccountCredentials.set(file("simplemessages-service.json"))
 }
 
 dependencies {
