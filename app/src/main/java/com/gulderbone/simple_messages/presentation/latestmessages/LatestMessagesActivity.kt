@@ -50,11 +50,13 @@ class LatestMessagesActivity : BaseActivity() {
         adapter.setOnItemClickListener { item, view -> onLatestMessageClicks(item, view) }
     }
 
-    private fun onLatestMessageClicks(item: Item<*>, view: View) {
-        val row = item as LatestMessage
-        val intent = Intent(view.context, ChatLogActivity::class.java)
-        intent.putExtra(NewChatActivity.USER_KEY, row.chatPartnerUser)
-        startActivity(intent)
+    private fun verifyUserIsLoggedIn() {
+        val uid = FirebaseAuth.getInstance().uid
+        if (uid == null) {
+            val intent = Intent(this, RegisterActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     private fun listenForLatestMessages() {
@@ -66,13 +68,11 @@ class LatestMessagesActivity : BaseActivity() {
         }
     }
 
-    private fun verifyUserIsLoggedIn() {
-        val uid = FirebaseAuth.getInstance().uid
-        if (uid == null) {
-            val intent = Intent(this, RegisterActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }
+    private fun onLatestMessageClicks(item: Item<*>, view: View) {
+        val row = item as LatestMessage
+        val intent = Intent(view.context, ChatLogActivity::class.java)
+        intent.putExtra(NewChatActivity.USER_KEY, row.chatPartnerUser)
+        startActivity(intent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
