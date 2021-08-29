@@ -91,6 +91,7 @@ lint/tmp/
 *.hprof
 
 # Other
-app/simplemessages-service.json
+simplemessages-service.json
 gradle.properties
-.json
+
+src/main/play
