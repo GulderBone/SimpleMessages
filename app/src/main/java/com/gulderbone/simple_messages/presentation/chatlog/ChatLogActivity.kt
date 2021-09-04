@@ -8,9 +8,9 @@ import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.databinding.ActivityChatLogBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.extensions.addDisposableTo
+import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
 import com.gulderbone.simple_messages.presentation.newchat.NewChatActivity
-import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.recyclerview_rows.ChatFromItem
 import com.gulderbone.simple_messages.recyclerview_rows.ChatToItem
 import com.xwray.groupie.GroupAdapter
