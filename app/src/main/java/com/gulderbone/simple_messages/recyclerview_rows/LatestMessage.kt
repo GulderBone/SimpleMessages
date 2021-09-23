@@ -10,6 +10,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.viewbinding.BindableItem
 
@@ -25,19 +27,14 @@ class LatestMessage(private val chatMessage: ChatMessage) : BindableItem<LatestM
             chatMessage.fromId
         }
 
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$chatPartnerId")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                chatPartnerUser = snapshot.getValue(User::class.java)
-                viewBinding.usernameTextviewLatestMessage.text = chatPartnerUser?.username
+        val chatPartnerReference = Firebase.firestore.document("users/$chatPartnerId")
+        chatPartnerReference.addSnapshotListener { value, error ->
+            chatPartnerUser = value?.toObject(User::class.java)
+            viewBinding.usernameTextviewLatestMessage.text = chatPartnerUser?.username
 
-                val targetImageView = viewBinding.imageViewLatestMessage
-                Picasso.get().load(chatPartnerUser?.profileImageUrl).into(targetImageView)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+            val targetImageView = viewBinding.imageViewLatestMessage
+            Picasso.get().load(chatPartnerUser?.profileImageUrl).into(targetImageView)
+        }
     }
 
     override fun getLayout(): Int = R.layout.latest_message_row

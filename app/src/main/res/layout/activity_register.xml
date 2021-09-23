@@ -75,14 +75,14 @@
         android:background="@drawable/rounded_edittext_register_login"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/username_edittext_register"
         app:layout_constraintStart_toStartOf="@+id/username_edittext_register"
         app:layout_constraintTop_toBottomOf="@+id/email_edittext_register">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
