@@ -3,6 +3,7 @@ package com.gulderbone.simple_messages.registerlogin
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -13,18 +14,19 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.extensions.getFilePathFromContentUri
-import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
 import com.gulderbone.simple_messages.models.User
-import com.gulderbone.simple_messages.utils.Constant
+import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
 import com.gulderbone.simple_messages.utils.RequestCode
 import com.vmadalin.easypermissions.EasyPermissions
 import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -139,7 +141,13 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val photoFile = File(filePath)
 
         CoroutineScope(Main).launch {
-            val compressedPhotoUri: Uri = Compressor.compress(this@RegisterActivity, photoFile).toUri()
+            val compressedPhotoUri: Uri = Compressor.compress(this@RegisterActivity, photoFile) {
+                if (Build.VERSION.SDK_INT < 30) {
+                    default(format = Bitmap.CompressFormat.WEBP)
+                } else {
+                    default(format = Bitmap.CompressFormat.WEBP_LOSSLESS)
+                }
+            }.toUri()
 
             val filename = UUID.randomUUID().toString()
             val reference = FirebaseStorage.getInstance().getReference("/images/$filename")
@@ -162,14 +170,14 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun saveUserToFirebaseDatabase(profileImageUrl: String) {
         val uid = FirebaseAuth.getInstance().uid ?: ""
-        val ref = FirebaseDatabase.getInstance(Constant.FIREBASE_DATABASE_URL).getReference("users/$uid")
 
         val username = binding.usernameEdittextRegister.editText?.text.toString()
         val user = User(uid, username, profileImageUrl)
 
-        ref.setValue(user)
+        val registerReference = Firebase.firestore.document("/users/$uid")
+        registerReference.set(user)
             .addOnSuccessListener {
-                Log.d(TAG, "User saved to Firebase Database")
+                Log.d(TAG, "User saved to Firestore")
 
                 val intent = Intent(this, LatestMessagesActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)

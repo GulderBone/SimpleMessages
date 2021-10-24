@@ -58,7 +58,7 @@ play {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
@@ -77,10 +77,11 @@ dependencies {
     implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
@@ -90,6 +91,10 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
+    // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
+
+    // TODO Added temporarily, as somehow it fixes Firestore for Android 11
+    implementation "io.grpc:grpc-okhttp:1.32.2"
 }
