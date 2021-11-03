@@ -20,9 +20,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.gulderbone.simple_messages.base.BaseActivity
 import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
 import com.gulderbone.simple_messages.extensions.TAG
-import com.gulderbone.simple_messages.extensions.getFilePathFromContentUri
 import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
+import com.gulderbone.simple_messages.utils.CountingIdlingResourceSingleton
 import com.gulderbone.simple_messages.utils.RequestCode
 import com.vmadalin.easypermissions.EasyPermissions
 import id.zelory.compressor.Compressor
@@ -37,6 +37,7 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var binding: ActivityRegisterBinding
 
     private var selectedPhotoUri: Uri? = null
+    private var selectedPhotoFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +101,9 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             ImageDecoder.decodeBitmap(source)
         }
 
+        selectedPhotoFile = File.createTempFile("registrationImage", ".png")
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, selectedPhotoFile?.outputStream())
+
         binding.selectphotoImageviewRegister.setImageBitmap(bitmap)
         binding.selectphotoImageviewRegister.isVisible = true
 
@@ -110,15 +114,9 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val email = binding.emailEdittextRegister.editText?.text.toString()
         val password = binding.passwordEdittextRegister.editText?.text.toString()
 
-        if (!binding.selectphotoImageviewRegister.isVisible) {
-            Toast.makeText(this, "Please choose a profile picture", Toast.LENGTH_SHORT).show()
-            return
-        }
+        if (!validateRegistrationInputs(email, password)) return
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please enter text in email/pw", Toast.LENGTH_SHORT).show()
-            return
-        }
+        CountingIdlingResourceSingleton.increment() // TODO Replace with loader
 
         FirebaseAuth.getInstance()
             .createUserWithEmailAndPassword(email, password)
@@ -134,14 +132,22 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             }
     }
 
+    private fun validateRegistrationInputs(email: String, password: String): Boolean {
+        if (!binding.selectphotoImageviewRegister.isVisible) {
+            Toast.makeText(this, "Please choose a profile picture", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter text in email/pw", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
     private fun uploadImageToFirebaseStorage() {
-        val photoUri = selectedPhotoUri ?: return
-        val filePath = photoUri.getFilePathFromContentUri(contentResolver) ?: return
-
-        val photoFile = File(filePath)
-
         CoroutineScope(Main).launch {
-            val compressedPhotoUri: Uri = Compressor.compress(this@RegisterActivity, photoFile) {
+            val compressedPhotoUri: Uri = Compressor.compress(this@RegisterActivity, selectedPhotoFile!!) {
                 if (Build.VERSION.SDK_INT < 30) {
                     default(format = Bitmap.CompressFormat.WEBP)
                 } else {

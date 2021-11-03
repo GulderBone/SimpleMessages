@@ -17,7 +17,7 @@ class LoginActivity : BaseActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.loginButtonLogin.setOnClickListener {
+        binding.loginButtonLogin.setOnClickListener { // TODO Add loader
             val email = binding.emailEdittextLogin.editText?.text.toString()
             val password = binding.passwordEdittextLogin.editText?.text.toString()
 

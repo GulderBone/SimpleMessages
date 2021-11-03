@@ -43,6 +43,7 @@
         app:layout_constraintTop_toBottomOf="@id/selectphoto_button_register">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_edittext_register_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -62,6 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/username_edittext_register">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_edittext_register_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -80,6 +82,7 @@
         app:layout_constraintTop_toBottomOf="@+id/email_edittext_register">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_edittext_register_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
