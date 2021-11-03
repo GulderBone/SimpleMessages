@@ -16,6 +16,7 @@ import com.gulderbone.simple_messages.presentation.newchat.NewChatActivity
 import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.recyclerview_rows.LatestMessage
 import com.gulderbone.simple_messages.registerlogin.RegisterActivity
+import com.gulderbone.simple_messages.utils.CountingIdlingResourceSingleton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -35,6 +36,8 @@ class LatestMessagesActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLatestMessagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        CountingIdlingResourceSingleton.decrement() // TODO Replace with loader in registration and login
 
         binding.recyclerviewLatestMessages.adapter = adapter
         binding.recyclerviewLatestMessages.addItemDecoration(
