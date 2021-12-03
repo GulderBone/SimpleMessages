@@ -10,18 +10,26 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.gulderbone.simple_messages.base.BaseActivity
-import com.gulderbone.simple_messages.databinding.ActivityRegisterBinding
+import com.gulderbone.simple_messages.R
+import com.gulderbone.simple_messages.base.BaseFragment
+import com.gulderbone.simple_messages.main.MainViewModel
+import com.gulderbone.simple_messages.databinding.FragmentRegisterBinding
 import com.gulderbone.simple_messages.extensions.TAG
+import com.gulderbone.simple_messages.extensions.visibleOrGone
 import com.gulderbone.simple_messages.models.User
-import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
 import com.gulderbone.simple_messages.utils.CountingIdlingResourceSingleton
 import com.gulderbone.simple_messages.utils.RequestCode
 import com.vmadalin.easypermissions.EasyPermissions
@@ -33,35 +41,45 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
-    private lateinit var binding: ActivityRegisterBinding
+class RegisterFragment : BaseFragment<FragmentRegisterBinding>(), EasyPermissions.PermissionCallbacks {
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRegisterBinding =
+        FragmentRegisterBinding::inflate
+
+    private lateinit var navController: NavController
+
+    private val mainViewModel by lazy { ViewModelProvider(requireActivity()).get(MainViewModel::class.java) }
 
     private var selectedPhotoUri: Uri? = null
     private var selectedPhotoFile: File? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding.selectphotoImageviewRegister.isVisible = false
+        navController = Navigation.findNavController(view)
 
-        binding.alreadyHaveAccountTextviewRegister.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }
+        with(binding) {
+            selectphotoImageviewRegister.isVisible = false
 
-        binding.selectphotoButtonRegister.setOnClickListener {
-            chooseProfilePicture()
-        }
+            alreadyHaveAccountTextviewRegister.setOnClickListener {
+                navController.navigate(R.id.action_registerFragment_to_loginFragment)
+            }
 
-        binding.registerButtonRegister.setOnClickListener {
-            performRegister()
+            selectphotoButtonRegister.setOnClickListener {
+                chooseProfilePicture()
+            }
+
+            registerButtonRegister.setOnClickListener {
+                performRegister()
+            }
+
+            mainViewModel.loaderVisibility().observe(viewLifecycleOwner, {
+                loader.loader.visibleOrGone(it)
+            })
         }
     }
 
     private fun chooseProfilePicture() {
-        if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (EasyPermissions.hasPermissions(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
             openImagePicker()
         } else {
             EasyPermissions.requestPermissions(
@@ -95,9 +113,9 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun userSelectedProfilePicture() {
         val bitmap = if (Build.VERSION.SDK_INT < 28) {
-            MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
+            MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, selectedPhotoUri)
         } else {
-            val source = ImageDecoder.createSource(contentResolver, selectedPhotoUri!!)
+            val source = ImageDecoder.createSource(requireActivity().contentResolver, selectedPhotoUri!!)
             ImageDecoder.decodeBitmap(source)
         }
 
@@ -118,6 +136,8 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
         CountingIdlingResourceSingleton.increment() // TODO Replace with loader
 
+        mainViewModel.setLoaderVisibility(true)
+
         FirebaseAuth.getInstance()
             .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
@@ -134,12 +154,12 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun validateRegistrationInputs(email: String, password: String): Boolean {
         if (!binding.selectphotoImageviewRegister.isVisible) {
-            Toast.makeText(this, "Please choose a profile picture", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "Please choose a profile picture", Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please enter text in email/pw", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "Please enter login and / or password", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
@@ -147,7 +167,7 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun uploadImageToFirebaseStorage() {
         CoroutineScope(Main).launch {
-            val compressedPhotoUri: Uri = Compressor.compress(this@RegisterActivity, selectedPhotoFile!!) {
+            val compressedPhotoUri: Uri = Compressor.compress(requireActivity(), selectedPhotoFile!!) {
                 if (Build.VERSION.SDK_INT < 30) {
                     default(format = Bitmap.CompressFormat.WEBP)
                 } else {
@@ -185,9 +205,7 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             .addOnSuccessListener {
                 Log.d(TAG, "User saved to Firestore")
 
-                val intent = Intent(this, LatestMessagesActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                navController.navigate(R.id.latestMessagesFragment)
             }
             .addOnFailureListener {
                 Log.e(TAG, "Saving user to Firebase Database failed: ${it.localizedMessage}")
@@ -206,7 +224,11 @@ class RegisterActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        Toast.makeText(this, "Permission to read files is required to choose profile picture", Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            requireActivity(),
+            "Permission to read files is required to choose profile picture",
+            Toast.LENGTH_LONG
+        ).show()
     }
     // EasyPermissions section end
 }

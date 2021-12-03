@@ -78,5 +78,6 @@
             app:layout_constraintTop_toBottomOf="@+id/login_button_login" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <include android:id="@+id/loader" layout="@layout/view_loader" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

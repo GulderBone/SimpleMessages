@@ -112,4 +112,6 @@
         app:layout_constraintStart_toStartOf="@+id/register_button_register"
         app:layout_constraintTop_toBottomOf="@+id/register_button_register" />
 
+    <include android:id="@+id/loader" layout="@layout/view_loader" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
