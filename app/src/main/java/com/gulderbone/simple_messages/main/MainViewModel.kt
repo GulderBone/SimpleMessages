@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class MainViewModel : ViewModel() {
+class MainViewModel : ViewModel() { // TODO Consider moving most of the code in MainActivity
     private val actionBarTitle = MutableLiveData<String>()
     private val loaderVisible = MutableLiveData(false)
 
