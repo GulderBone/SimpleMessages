@@ -1,14 +1,11 @@
 package com.gulderbone.simple_messages.presentation.latestmessages
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.models.ChatMessage
 import com.gulderbone.simple_messages.models.User
 
@@ -25,8 +22,8 @@ class LatestMessagesViewModel : ViewModel() {
         val uid = FirebaseAuth.getInstance().uid
 
         val currentUserReference = Firebase.firestore.document("/users/$uid")
-        currentUserReference.addSnapshotListener { value, error ->
-            LatestMessagesActivity.currentUser = value?.toObject(User::class.java)
+        currentUserReference.addSnapshotListener { value, _ ->
+            LatestMessagesFragment.currentUser = value?.toObject(User::class.java)
         }
     }
 
@@ -35,7 +32,7 @@ class LatestMessagesViewModel : ViewModel() {
 
         val latestMessageReference = Firebase.firestore.collection("/users/$fromId/latest_messages")
 
-        latestMessageReference.addSnapshotListener { value, error ->
+        latestMessageReference.addSnapshotListener { value, _ ->
             value?.documentChanges?.forEach { documentChange ->
                 val chatMessage = documentChange.document.toObject(ChatMessage::class.java)
                 val key = chatMessage.toId

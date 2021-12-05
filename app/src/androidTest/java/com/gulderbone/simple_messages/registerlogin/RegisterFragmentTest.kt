@@ -23,7 +23,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.firebase.auth.FirebaseAuth
 import com.gulderbone.simple_messages.R
-import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
+import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesFragment
 import com.gulderbone.simple_messages.utils.CountingIdlingResourceSingleton
 import com.gulderbone.simple_messages.utils.ToastMatcher.Companion.onToast
 import org.hamcrest.CoreMatchers.`is`
@@ -37,11 +37,11 @@ import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
-class RegisterActivityTest {
+class RegisterFragmentTest {
 
     @Rule
     @JvmField
-    val activityRule = ActivityScenarioRule(RegisterActivity::class.java)
+    val activityRule = ActivityScenarioRule(RegisterFragment::class.java)
 
     @Before
     fun setup() {
@@ -123,7 +123,7 @@ class RegisterActivityTest {
 
     private fun didGoToLatestMessages() {
         CountingIdlingResourceSingleton.countingIdlingResource.registerIdleTransitionCallback {
-            intended(hasComponent(LatestMessagesActivity::class.java.name))
+            intended(hasComponent(LatestMessagesFragment::class.java.name))
         }
     }
 

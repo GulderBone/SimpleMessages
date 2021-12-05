@@ -2,15 +2,18 @@ package com.gulderbone.simple_messages.presentation.chatlog
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.gulderbone.simple_messages.base.BaseActivity
-import com.gulderbone.simple_messages.databinding.ActivityChatLogBinding
+import com.gulderbone.simple_messages.base.BaseFragment
+import com.gulderbone.simple_messages.main.MainViewModel
+import com.gulderbone.simple_messages.databinding.FragmentChatLogBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.extensions.addDisposableTo
 import com.gulderbone.simple_messages.models.User
-import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesActivity
-import com.gulderbone.simple_messages.presentation.newchat.NewChatActivity
+import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesFragment
 import com.gulderbone.simple_messages.recyclerview_rows.ChatFromItem
 import com.gulderbone.simple_messages.recyclerview_rows.ChatToItem
 import com.xwray.groupie.GroupAdapter
@@ -18,29 +21,35 @@ import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class ChatLogActivity : BaseActivity() {
-    private lateinit var binding: ActivityChatLogBinding
+class ChatLogFragment : BaseFragment<FragmentChatLogBinding>() {
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentChatLogBinding =
+        FragmentChatLogBinding::inflate
 
     private val adapter = GroupAdapter<GroupieViewHolder>()
+
+    private val baseViewModel by lazy { ViewModelProvider(requireActivity()).get(MainViewModel::class.java) }
 
     private val viewModel by lazy { ViewModelProvider(this).get(ChatLogViewModel::class.java) }
 
     var toUser: User? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityChatLogBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerviewChatLog.adapter = adapter
-
-        toUser = intent.getParcelableExtra(NewChatActivity.USER_KEY)
-        supportActionBar?.title = toUser?.username
+        toUser = arguments?.getParcelable("toUser")
+        val username = toUser?.username
+        if (username != null) {
+            baseViewModel.setActionBarTitle(username)
+        }
 
         listenForMessages()
 
-        binding.sendButtonChatLog.setOnClickListener {
-            performSendMessage()
+        with(binding) {
+            recyclerviewChatLog.adapter = adapter
+
+            sendButtonChatLog.setOnClickListener {
+                sendMessage()
+            }
         }
     }
 
@@ -51,7 +60,7 @@ class ChatLogActivity : BaseActivity() {
             .subscribe({ chatMessage ->
                 Log.d(TAG, chatMessage.text)
                 if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                    val currentUser = LatestMessagesActivity.currentUser
+                    val currentUser = LatestMessagesFragment.currentUser
                     adapter.add(ChatFromItem(chatMessage.text, currentUser ?: return@subscribe))
                 } else {
                     adapter.add(ChatToItem(chatMessage.text, toUser ?: return@subscribe))
@@ -62,7 +71,7 @@ class ChatLogActivity : BaseActivity() {
             }).addDisposableTo(disposables)
     }
 
-    private fun performSendMessage() {
+    private fun sendMessage() {
         val text = binding.edittextChatLog.text.toString()
 
         val messageSent = viewModel.sendMessage(text, toUser)
