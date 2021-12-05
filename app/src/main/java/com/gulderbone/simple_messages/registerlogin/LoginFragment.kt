@@ -51,7 +51,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
             navController.navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
-        baseViewModel.loaderVisibility().observe(requireActivity()) {
+        baseViewModel.loaderVisibility().observe(viewLifecycleOwner) {
             binding.loader.loader.visibleOrGone(it)
         }
     }
