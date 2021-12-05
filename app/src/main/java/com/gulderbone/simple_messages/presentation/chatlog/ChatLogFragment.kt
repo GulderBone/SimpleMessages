@@ -1,17 +1,19 @@
 package com.gulderbone.simple_messages.presentation.chatlog
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.gulderbone.simple_messages.base.BaseFragment
-import com.gulderbone.simple_messages.main.MainViewModel
 import com.gulderbone.simple_messages.databinding.FragmentChatLogBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.extensions.addDisposableTo
+import com.gulderbone.simple_messages.main.MainViewModel
 import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesFragment
 import com.gulderbone.simple_messages.recyclerview_rows.ChatFromItem
@@ -47,10 +49,18 @@ class ChatLogFragment : BaseFragment<FragmentChatLogBinding>() {
         with(binding) {
             recyclerviewChatLog.adapter = adapter
 
+            showKeyboard()
+
             sendButtonChatLog.setOnClickListener {
                 sendMessage()
             }
         }
+    }
+
+    private fun FragmentChatLogBinding.showKeyboard() {
+        edittextChatLog.requestFocus()
+        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(edittextChatLog, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun listenForMessages() {

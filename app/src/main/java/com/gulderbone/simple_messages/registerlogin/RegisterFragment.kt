@@ -25,10 +25,10 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.base.BaseFragment
-import com.gulderbone.simple_messages.main.MainViewModel
 import com.gulderbone.simple_messages.databinding.FragmentRegisterBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.extensions.visibleOrGone
+import com.gulderbone.simple_messages.main.MainViewModel
 import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.utils.CountingIdlingResourceSingleton
 import com.gulderbone.simple_messages.utils.RequestCode
@@ -148,6 +148,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(), EasyPermission
                 uploadImageToFirebaseStorage()
             }
             .addOnFailureListener {
+                Toast.makeText(requireActivity(), it.message, Toast.LENGTH_LONG).show()
                 Log.e(TAG, "Failed to create user: ${it.message}")
             }
     }
