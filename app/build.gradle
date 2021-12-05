@@ -8,15 +8,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.gulderbone.simple_messages"
         minSdkVersion 23
-        targetSdkVersion 30
-        versionCode 8
-        versionName "0.0.8 - alpha"
+        targetSdkVersion 31
+        versionCode 9
+        versionName "0.0.9 - alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
