@@ -54,6 +54,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
                 .addOnFailureListener {
                     Toast.makeText(requireActivity(), it.message, Toast.LENGTH_LONG).show()
                     Log.e(TAG, "Failed to log in: $it")
+                    baseViewModel.setLoaderVisibility(false)
                 }
         }
 

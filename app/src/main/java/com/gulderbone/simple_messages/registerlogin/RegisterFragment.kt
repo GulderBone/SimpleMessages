@@ -47,7 +47,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(), EasyPermission
 
     private lateinit var navController: NavController
 
-    private val mainViewModel by lazy { ViewModelProvider(requireActivity()).get(MainViewModel::class.java) }
+    private val baseViewModel by lazy { ViewModelProvider(requireActivity()).get(MainViewModel::class.java) }
 
     private var selectedPhotoUri: Uri? = null
     private var selectedPhotoFile: File? = null
@@ -72,7 +72,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(), EasyPermission
                 performRegister()
             }
 
-            mainViewModel.loaderVisibility().observe(viewLifecycleOwner, {
+            baseViewModel.loaderVisibility().observe(viewLifecycleOwner, {
                 loader.loader.visibleOrGone(it)
             })
         }
@@ -136,7 +136,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(), EasyPermission
 
         CountingIdlingResourceSingleton.increment() // TODO Replace with loader
 
-        mainViewModel.setLoaderVisibility(true)
+        baseViewModel.setLoaderVisibility(true)
 
         FirebaseAuth.getInstance()
             .createUserWithEmailAndPassword(email, password)
@@ -150,6 +150,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(), EasyPermission
             .addOnFailureListener {
                 Toast.makeText(requireActivity(), it.message, Toast.LENGTH_LONG).show()
                 Log.e(TAG, "Failed to create user: ${it.message}")
+
+                baseViewModel.setLoaderVisibility(false)
             }
     }
 
@@ -191,6 +193,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(), EasyPermission
                 }
                 .addOnFailureListener {
                     Log.e(TAG, "Uploading profile picture failed: ${it.localizedMessage}")
+
+                    baseViewModel.setLoaderVisibility(false)
                 }
         }
     }
@@ -210,6 +214,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(), EasyPermission
             }
             .addOnFailureListener {
                 Log.e(TAG, "Saving user to Firebase Database failed: ${it.localizedMessage}")
+
+                baseViewModel.setLoaderVisibility(false)
             }
     }
 
