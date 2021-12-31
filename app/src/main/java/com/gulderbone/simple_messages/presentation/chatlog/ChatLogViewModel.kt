@@ -1,12 +1,19 @@
 package com.gulderbone.simple_messages.presentation.chatlog
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.gulderbone.simple_messages.domain.RetrofitInstance
+import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.models.ChatMessage
+import com.gulderbone.simple_messages.models.PushNotification
 import com.gulderbone.simple_messages.models.User
 import io.reactivex.rxjava3.core.Observable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class ChatLogViewModel : ViewModel() {
@@ -52,5 +59,18 @@ class ChatLogViewModel : ViewModel() {
         latestMessageToReference.set(chatMessage)
 
         return true
+    }
+
+    fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if (response.isSuccessful) {
+                Log.d(TAG, "Response ${response.message()}")
+            } else {
+                Log.e(TAG, "Posting new message notification failed: ${response.message()}")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Posting new message notification failed: ", e)
+        }
     }
 }

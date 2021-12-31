@@ -49,8 +49,6 @@ class LatestMessagesFragment : BaseFragment<FragmentLatestMessagesBinding>() {
                 DividerItemDecoration.VERTICAL
             )
         )
-        listenForLatestMessages()
-
         adapter.setOnItemClickListener { item, _ -> onLatestMessageClicks(item) }
 
         mainViewModel.setLoaderVisibility(false)
@@ -63,6 +61,9 @@ class LatestMessagesFragment : BaseFragment<FragmentLatestMessagesBinding>() {
 
     override fun onResume() {
         mainViewModel.setActionBarTitle("Latest Messages")
+
+        listenForLatestMessages()
+
         super.onResume()
     }
 

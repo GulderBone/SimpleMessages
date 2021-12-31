@@ -14,6 +14,8 @@ import com.gulderbone.simple_messages.databinding.FragmentChatLogBinding
 import com.gulderbone.simple_messages.extensions.TAG
 import com.gulderbone.simple_messages.extensions.addDisposableTo
 import com.gulderbone.simple_messages.main.MainViewModel
+import com.gulderbone.simple_messages.models.NotificationData
+import com.gulderbone.simple_messages.models.PushNotification
 import com.gulderbone.simple_messages.models.User
 import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesFragment
 import com.gulderbone.simple_messages.recyclerview_rows.ChatFromItem
@@ -82,14 +84,27 @@ class ChatLogFragment : BaseFragment<FragmentChatLogBinding>() {
     }
 
     private fun sendMessage() {
-        val text = binding.edittextChatLog.text.toString()
+        val message = binding.edittextChatLog.text.toString()
 
-        val messageSent = viewModel.sendMessage(text, toUser)
+        val messageSent = viewModel.sendMessage(message, toUser)
 
         if (messageSent) {
             binding.edittextChatLog.text?.clear()
             binding.recyclerviewChatLog.scrollToPosition(adapter.itemCount - 1)
+
+            val messagingToken = toUser?.messagingToken ?: return
+            sendNotification(message, messagingToken)
         }
+    }
+
+    private fun sendNotification(text: String, messagingToken: String) {
+        val username = LatestMessagesFragment.currentUser?.username ?: return
+
+        viewModel.sendNotification(
+            PushNotification(
+                NotificationData(username, text), messagingToken
+            )
+        )
     }
 }
 
