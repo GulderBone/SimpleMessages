@@ -95,3 +95,4 @@ gradle.properties
 
 src/main/play
 /simplemessages-service.json
+/src/main/java/com/gulderbone/simple_messages/utils/Constants.kt
