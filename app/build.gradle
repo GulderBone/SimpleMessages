@@ -11,6 +11,11 @@ android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
+    Properties localProperties = new Properties()
+    if (project.rootProject.file("local.properties").exists()) {
+        localProperties.load(project.rootProject.file("local.properties").newDataInputStream())
+    }
+
     defaultConfig {
         applicationId "com.gulderbone.simple_messages"
         minSdkVersion 23
@@ -20,6 +25,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
+
+        buildConfigField "String", "SERVER_KEY", localProperties.getProperty("SERVER_KEY") ?: ""
     }
 
     buildFeatures {

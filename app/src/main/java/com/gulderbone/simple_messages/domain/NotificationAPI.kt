@@ -1,8 +1,8 @@
 package com.gulderbone.simple_messages.domain
 
+import com.gulderbone.simple_messages.BuildConfig.SERVER_KEY
 import com.gulderbone.simple_messages.models.PushNotification
 import com.gulderbone.simple_messages.utils.Constants.CONTENT_TYPE
-import com.gulderbone.simple_messages.utils.Constants.SERVER_KEY
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body

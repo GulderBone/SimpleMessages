@@ -10,14 +10,13 @@ import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.gulderbone.simple_messages.R
 import com.gulderbone.simple_messages.main.MainActivity
-import com.gulderbone.simple_messages.models.User
-import com.gulderbone.simple_messages.presentation.latestmessages.LatestMessagesFragment
 import kotlin.random.Random
 
 private const val MESSAGE_CHANNEL_ID = "messages"
@@ -49,19 +48,13 @@ class NotificationService : FirebaseMessagingService() {
         notificationManager.notify(notificationID, notification)
     }
 
-
-
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        LatestMessagesFragment.currentUser?.messagingToken = token
 
-        val currentUser = LatestMessagesFragment.currentUser
-        if (currentUser != null) {
-            val currentUserReference = Firebase.firestore.document("users/${currentUser.uid}")
-            currentUserReference.set(
-                User(currentUser.uid, currentUser.username, currentUser.profileImageUrl, token)
-            )
-        }
+        val currentUserUid = Firebase.auth.uid ?: return
+
+        val currentUserReference = Firebase.firestore.document("users/$currentUserUid")
+        currentUserReference.update("messagingToken", token)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
