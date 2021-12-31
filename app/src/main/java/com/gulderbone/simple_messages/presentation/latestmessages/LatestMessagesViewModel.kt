@@ -3,9 +3,12 @@ package com.gulderbone.simple_messages.presentation.latestmessages
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.ktx.messaging
 import com.gulderbone.simple_messages.models.ChatMessage
 import com.gulderbone.simple_messages.models.User
 
@@ -16,6 +19,9 @@ class LatestMessagesViewModel : ViewModel() {
     init {
         fetchCurrentUser()
         listenForLatestMessages()
+        updateUserToken().addOnSuccessListener { token ->
+            Firebase.messaging.subscribeToTopic(token)
+        }
     }
 
     private fun fetchCurrentUser() {
@@ -39,6 +45,14 @@ class LatestMessagesViewModel : ViewModel() {
                 latestMessagesMap[key] = chatMessage
                 latestMessages.value = latestMessagesMap
             }
+        }
+    }
+
+    private fun updateUserToken(): Task<String> {
+        return FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+            val currentUserId = FirebaseAuth.getInstance().uid
+            Firebase.firestore.document("/users/$currentUserId")
+                .update("messagingToken", token)
         }
     }
 

@@ -94,3 +94,4 @@ lint/tmp/
 gradle.properties
 
 src/main/play
+/simplemessages-service.json
