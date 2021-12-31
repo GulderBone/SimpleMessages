@@ -20,8 +20,8 @@ android {
         applicationId "com.gulderbone.simple_messages"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 13
-        versionName "0.0.13 - alpha"
+        versionCode 14
+        versionName "0.0.14 - alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
