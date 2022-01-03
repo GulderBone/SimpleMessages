@@ -20,8 +20,8 @@ android {
         applicationId "com.gulderbone.simple_messages"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 14
-        versionName "0.0.14 - alpha"
+        versionCode 15
+        versionName "0.0.15 - alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
@@ -122,4 +122,5 @@ dependencies {
 
     // TODO Added temporarily, as somehow it fixes Firestore for Android 11
     implementation "io.grpc:grpc-okhttp:1.32.2"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 }
