@@ -1,6 +1,6 @@
 # SimpleMessages
 
-### https://play.google.com/store/apps/details?id=com.gulderbone.simple_messages
+### [Google play link](https://play.google.com/store/apps/details?id=com.gulderbone.simple_messages)
 
 ### Stack:
 ##### RxJava / Coroutines (trying to switch completely to Coroutines)
