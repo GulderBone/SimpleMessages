@@ -9,5 +9,6 @@
 #### Navigation Component
 #### Groupie (RecyclerView)
 
-### MVVM
-### Fragments
+### Architecture
+#### MVVM
+#### Fragments
